@@ -205,6 +205,14 @@ function ns:BuildUI()
     banner:Hide()
     ns.banner = banner
 
+    -- Achievement icon (shown only when earned)
+    local bannerIcon = banner:CreateTexture(nil, "ARTWORK")
+    bannerIcon:SetSize(BANNER_HEIGHT - 6, BANNER_HEIGHT - 6)
+    bannerIcon:SetPoint("LEFT", banner, "LEFT", 6, 0)
+    bannerIcon:SetTexture(6035316)
+    bannerIcon:Hide()
+    ns.bannerIcon = bannerIcon
+
     local bannerLine1 = banner:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     bannerLine1:SetPoint("TOP", banner, "TOP", 0, -5)
     bannerLine1:SetTextColor(0.3, 1.0, 0.3)
@@ -215,6 +223,7 @@ function ns:BuildUI()
     bannerLine2:SetPoint("TOP", bannerLine1, "BOTTOM", 0, -2)
     bannerLine2:SetTextColor(0.6, 0.6, 0.6)
     bannerLine2:SetText("Vashj'ir - Abyssal Depths (click for waypoint)")
+    ns.bannerLine2 = bannerLine2
 
     banner:RegisterForClicks("AnyUp")
     banner:SetScript("OnClick", function()
@@ -368,15 +377,20 @@ end
 function ns:RefreshUI()
     if not ns.tracker then return end
     local db = ns:GetDB()
-    -- Update title with confirmed vs detected status
-    local titleStr = "Mind-Seeker (" .. ns.completedCount .. "/31)"
-    if ns.confirmedCount >= 17 then
-        titleStr = titleStr .. " |cff00ff00Ready!|r"
-    elseif ns.completedCount >= 17 then
-        titleStr = titleStr .. " |cffd1d100Ready?|r"
+    -- Update title with achievement / confirmed / detected status
+    local titleStr
+    if ns.achievementEarned then
+        titleStr = "|cff00ff00Mind-Seeker|r (" .. ns.completedCount .. "/31)"
     else
-        local needed = math.max(0, 17 - ns.completedCount)
-        titleStr = titleStr .. " — need " .. needed
+        titleStr = "Mind-Seeker (" .. ns.completedCount .. "/31)"
+        if ns.confirmedCount >= 17 then
+            titleStr = titleStr .. " |cff00ff00Ready!|r"
+        elseif ns.completedCount >= 17 then
+            titleStr = titleStr .. " |cffd1d100Ready?|r"
+        else
+            local needed = math.max(0, 17 - ns.completedCount)
+            titleStr = titleStr .. " — need " .. needed
+        end
     end
     ns.titleText:SetText(titleStr)
 
@@ -391,20 +405,38 @@ function ns:RefreshUI()
         ns.content:Show()
         ns.sortedIndices = GetSortedIndices()
 
-        -- Show/hide ready banner (yellow if detected 17+, green if confirmed 17+)
+        -- Show/hide ready banner
         local bannerOffset = 0
-        if ns.completedCount >= 17 and ns.banner then
-            ns.banner:Show()
-            bannerOffset = BANNER_HEIGHT
-            if ns.confirmedCount >= 17 then
-                ns.banner:SetBackdropColor(0.1, 0.25, 0.1, 0.9)
-                ns.bannerLine1:SetTextColor(0.3, 1.0, 0.3)
+        if ns.banner then
+            if ns.achievementEarned then
+                ns.banner:Show()
+                bannerOffset = BANNER_HEIGHT
+                ns.banner:SetBackdropColor(0.15, 0.1, 0.25, 0.9)
+                ns.bannerIcon:Show()
+                ns.bannerLine1:ClearAllPoints()
+                ns.bannerLine1:SetPoint("TOP", ns.banner, "TOP", 14, -5)
+                ns.bannerLine1:SetText("Mind-Seeker Achieved!")
+                ns.bannerLine1:SetTextColor(0.7, 0.5, 1.0)
+                ns.bannerLine2:SetText("Click for Pearl of the Abyss waypoint")
+                ns.bannerLine2:SetTextColor(0.5, 0.5, 0.5)
+            elseif ns.completedCount >= 17 then
+                ns.banner:Show()
+                bannerOffset = BANNER_HEIGHT
+                ns.bannerIcon:Hide()
+                ns.bannerLine1:ClearAllPoints()
+                ns.bannerLine1:SetPoint("TOP", ns.banner, "TOP", 0, -5)
+                ns.bannerLine1:SetText("Go to the Pearl of the Abyss!")
+                ns.bannerLine2:SetText("Vashj'ir - Abyssal Depths (click for waypoint)")
+                if ns.confirmedCount >= 17 then
+                    ns.banner:SetBackdropColor(0.1, 0.25, 0.1, 0.9)
+                    ns.bannerLine1:SetTextColor(0.3, 1.0, 0.3)
+                else
+                    ns.banner:SetBackdropColor(0.25, 0.2, 0.05, 0.9)
+                    ns.bannerLine1:SetTextColor(1.0, 0.82, 0.0)
+                end
             else
-                ns.banner:SetBackdropColor(0.25, 0.2, 0.05, 0.9)
-                ns.bannerLine1:SetTextColor(1.0, 0.82, 0.0)
+                ns.banner:Hide()
             end
-        elseif ns.banner then
-            ns.banner:Hide()
         end
 
         -- Reposition rows below banner

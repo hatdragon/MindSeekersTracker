@@ -1,8 +1,11 @@
 local addonName, ns = ...
 
 local frame = CreateFrame("Frame")
+local MIND_SEEKER_ACHIEVEMENT = 62189
+
 ns.completedCount = 0
 ns.confirmedCount = 0
+ns.achievementEarned = false
 ns.results = {}
 ns.confirmed = {}
 
@@ -46,6 +49,9 @@ function ns:CheckAllSecrets()
         end
     end
     ns.completedCount = count
+    -- Check if the actual FoS has been earned
+    local _, _, _, completed = GetAchievementInfo(MIND_SEEKER_ACHIEVEMENT)
+    ns.achievementEarned = completed or false
     return ns.results, count
 end
 
