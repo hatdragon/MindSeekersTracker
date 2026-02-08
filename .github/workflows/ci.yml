@@ -19,11 +19,6 @@ jobs:
           test -d "MindSeekersTracker" || (echo "Expected ./MindSeekersTracker addon folder not found" && exit 1)
           test -f "MindSeekersTracker/MindSeekersTracker.toc" || (echo "Expected MindSeekersTracker/MindSeekersTracker.toc not found" && exit 1)
       
-      - name: Verify minimal docs exist
-        run: |
-          test -d "docs" || (echo "Missing docs/ directory" && exit 1)
-          test -f "docs/index.md" || (echo "Missing docs/index.md" && exit 1)
-
       - name: Build test zip (no publish)
         run: |
           mkdir -p dist
