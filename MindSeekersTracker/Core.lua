@@ -173,12 +173,22 @@ frame:SetScript("OnEvent", function(self, event, ...)
         if ns.BuildUI then
             ns:BuildUI()
         end
+        -- Journal-ready events (data not available at PLAYER_LOGIN)
+        self:RegisterEvent("MOUNT_JOURNAL_SEARCH_UPDATED")
+        self:RegisterEvent("PET_JOURNAL_LIST_UPDATE")
+        self:RegisterEvent("TRANSMOG_COLLECTION_SOURCE_ADDED")
+        -- Ongoing update events
         self:RegisterEvent("NEW_MOUNT_ADDED")
         self:RegisterEvent("NEW_PET_ADDED")
         self:RegisterEvent("QUEST_TURNED_IN")
         self:RegisterEvent("NEW_TOY_ADDED")
         self:RegisterEvent("TRANSMOG_COLLECTION_UPDATED")
         self:RegisterEvent("ACHIEVEMENT_EARNED")
+        -- Delayed recheck for anything that loads late
+        C_Timer.After(3, function()
+            ns:CheckAllSecrets()
+            if ns.RefreshUI then ns:RefreshUI() end
+        end)
     else
         ns:CheckAllSecrets()
         if ns.RefreshUI then
