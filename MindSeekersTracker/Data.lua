@@ -14,50 +14,50 @@ ns.secrets = {
     },
     {
         name = "Fathom Dweller",
-        hint = "Kosumoth the Hungering world boss drop",
+        hint = "Go to the Broken Shore and speak with Drak'thul",
         type = "mount",
         id = 838,
-        waypoint = { 790, 0.47, 0.87 }, -- Eye of Azshara
+        waypoint = { 646, 37.2, 71.8 }, -- Eye of Azshara
         record = "Record of Drak'thul's Madness",
     },
     {
         name = "Riddler's Mind-Worm",
-        hint = "Follow page clues across Azeroth",
+        hint = "For this secret, you will have to locate hidden pages scattered across Azeroth.",
         type = "mount",
         id = 947,
-        waypoint = { 627, 0.52, 0.36 }, -- Dalaran (Broken Isles)
+        waypoint = { }, -- Dalaran (Broken Isles)
         record = "Record of the Riddler",
     },
     {
         name = "Lucid Nightmare",
-        hint = "Solve the Endless Halls maze",
+        hint = "The Mind-Seekers seem to have a penchant for leaving their notes in obvious places. Look around in Curiosities & Moore in Dalaran.",
         type = "mount",
         id = 961,
-        waypoint = { 1, 0.63, 0.23 }, -- Durotar (start at Ulduar)
+        waypoint = { }, 
         record = "Record of the Endless Nightmare",
     },
     {
         name = "The Hivemind",
-        hint = "5-player monocle puzzle",
+        hint = "To start the secret you will first have to purchase Talisman of True Treasure Tracking from Griftah in Shattrath.",
         type = "mount",
         id = 1025,
-        waypoint = { 863, 0.55, 0.56 }, -- Nazmir
+        waypoint = { "Shattrath", 65, 69 },
         record = "Record of the Hivemind",
     },
     {
         name = "Nazjatar Blood Serpent",
-        hint = "Combine 3 Crimson Crystals in Nazjatar",
+        hint = "Combine Crystals at the Altar of the Abyss",
         type = "mount",
         id = 1057,
-        waypoint = { 1355, 0.43, 0.27 }, -- Nazjatar
+        waypoint = { "Stormsong Valley", 46.6, 36.2 }, -- Stormsong Valley
         record = "Record of Abyssal Blood",
     },
     {
         name = "Crimson Tidestallion",
-        hint = "Feed Crimson Octopus in Nazjatar",
+        hint = "Unlock Mrrl and get access to his Secret Stash",
         type = "mount",
         id = 1260,
-        waypoint = { 1355, 0.60, 0.21 }, -- Nazjatar
+        waypoint = { "Nazjatar", 48, 45 }, -- Nazjatar
         record = "Record of a Grggly Stash",
     },
     {
@@ -70,97 +70,97 @@ ns.secrets = {
     },
     {
         name = "Bound Shadehound",
-        hint = "Rift hunting in the Maw",
+        hint = "Hunting in the Maw",
         type = "mount",
         id = 1441,
-        waypoint = { 1543, 0.25, 0.38 }, -- The Maw
+        waypoint = { 1543, 24.0, 75.5}, -- The Maw
         record = "Record of Taming the Maw",
     },
     {
         name = "Slime Serpent",
-        hint = "Plaguefall pipe puzzle",
+        hint = "All the way to the end of Plaguefall, then turn around and look behind you",
         type = "mount",
         id = 1445,
-        waypoint = { 1674, 0.59, 0.67 }, -- Plaguefall
+        waypoint = {  }, -- Plaguefall
         record = "Record of the Secrets Behind You",
     },
     {
         name = "Xy Trustee's Gearglider",
-        hint = "Solve Zereth Mortis cypher puzzles",
+        hint = "Manaforge Vandals rank 8, then see about deals",
         type = "mount",
         id = 1482,
-        waypoint = { 1970, 0.52, 0.63 }, -- Zereth Mortis
+        waypoint = { 2371, 42.0, 22.2 },
         record = "Record of Cartel Cyphers",
     },
     {
         name = "Hand of Nilganihmaht",
-        hint = "Collect 5 ring pieces across Shadowlands",
+        hint = "Gotta Hand It To Ya, Collect 5 ring pieces across Shadowlands",
         type = "mount",
         id = 1503,
-        waypoint = { 1543, 0.20, 0.55 }, -- The Maw
+        waypoint = { 1543, 25.7, 32.5 }, -- The Maw
         record = "Record of a Dominant Hand",
     },
     {
         name = "Otto",
-        hint = "Feed otters in Azure Span",
+        hint = "The Way to an Otto's Heart",
         type = "mount",
         id = 1656,
-        waypoint = { 2024, 0.67, 0.45 }, -- Azure Span
+        waypoint = { 2023, 82.2, 73.2 }, -- Azure Span
         record = "Record of a Slippery Find",
     },
     {
         name = "Mimiron's Jumpjets",
-        hint = "Uldaman puzzle sequence",
+        hint = "To forge Mimiron's Jumpjets you have to find 3 booster parts and then combine them.",
         type = "mount",
         id = 1813,
-        waypoint = { 2073, 0.50, 0.50 }, -- Uldaman
+        waypoint = { 210, 59.4, 79.0 },
         record = "Record of Mimiron's Master Mind",
     },
     {
         name = "Incognitro",
-        hint = "Decode Mo'arg technology in TWW",
+        hint = "Select the Detective title and speak with the Dalaran Survivor in Dornogal",
         type = "mount",
         id = 1943,
-        waypoint = { 2248, 0.50, 0.50 }, -- Isle of Dorn
+        waypoint = { 2339, 55.0, 29.0 }, -- Isle of Dorn
         record = "Record of Indecipherable Mo'arg Technology",
     },
     {
         name = "Voidfire Deathcycle",
-        hint = "Void crystal sequence in TWW",
+        hint = "Equip one Faceless Mask and enter the Horrific Vision of Stormwind.",
         type = "mount",
         id = 1948,
-        waypoint = { 2248, 0.50, 0.50 }, -- Isle of Dorn
+        waypoint = { 2404, 62.0, 30.4 }, -- Isle of Dorn
         record = "Record of Visions of Void",
     },
     {
         name = "Thrayir, Eyes of the Siren",
-        hint = "Siren's Song questline in TWW",
+        hint = "hrayir resides in The Forgotten Vault, which you can access by interacting with the Singing Tablet on the Siren Isle.",
         type = "mount",
         id = 2322,
-        waypoint = { 2248, 0.50, 0.50 }, -- Isle of Dorn
+        waypoint = { 2375, 72.7, 61.4 }, -- Isle of Dorn
         record = "Record of the Siren's Song",
     },
 
     -- PETS (9)
     {
         name = "Uuna",
-        hint = "Complete Uuna's world tour storyline",
+        hint = "For this secret the reward is hugs, and the gratitude of a little girl.",
         type = "pet",
         id = 2136,
-        waypoint = { 885, 0.55, 0.60 }, -- Antoran Wastes
+        waypoint = { 885, 52.0, 38.0  }, -- Antoran Wastes
         record = "Record of a Friend in the Darkness",
     },
     {
         name = "Baa'l",
-        hint = "Find dark pebbles across Azeroth",
+        hint = "Be done with Uuna and the find conspicuous note and dark pebbles across Azeroth",
         type = "pet",
         id = 2352,
-        waypoint = { 942, 0.56, 0.31 }, -- Stormsong Valley
+        waypoint = { 863, 46.4, 54.0}, -- Stormsong Valley
         record = "Record of Ominously Ordinary Pebbles",
     },
     {
         name = "Wicker Pup",
-        hint = "Drustvar ritual collectibles",
+        hint = "Drustvar ritual collectibles - created by combining several items",
         type = "pet",
         id = 2411,
         waypoint = { 896, 0.55, 0.31 }, -- Drustvar
@@ -168,98 +168,98 @@ ns.secrets = {
     },
     {
         name = "Jenafur",
-        hint = "Karazhan food puzzle",
+        hint = "Locate Amara Lunastar",
         type = "pet",
         id = 2795,
-        waypoint = { 42, 0.47, 0.75 }, -- Deadwind Pass
+        waypoint = { "Ashenvale",17.4,49.3 }, -- Deadwind Pass
         record = "Record of Karazhan's Kitten",
     },
     {
         name = "Glimr",
-        hint = "Bastion egg hatching chain",
+        hint = "Glimr is a secret purple murloc battle pet obtained from Glimrs Cracked Egg.",
         type = "pet",
         id = 2888,
-        waypoint = { 1533, 0.52, 0.80 }, -- Bastion
+        waypoint = { 116, 18.4, 88.2 },
         record = "Record of Glimmering Hope",
     },
     {
         name = "Courage",
-        hint = "Maw Beastwarrens puzzle",
+        hint = "Head to Nemea's Retreat and look for cubs",
         type = "pet",
         id = 3065,
-        waypoint = { 1543, 0.30, 0.18 }, -- The Maw
+        waypoint = { 1533, 56.91, 39.05  }, -- The Maw
         record = "Record of Collectible Courage",
     },
     {
         name = "Phoenix Wishwing",
-        hint = "Primalist puzzle in Dragon Isles",
+        hint = "A hidden quest offered by Tarjin the Blind",
         type = "pet",
         id = 3292,
-        waypoint = { 2024, 0.38, 0.64 }, -- Azure Span
+        waypoint = { 2022, 16.2, 62.4 }, -- Azure Span
         record = "Record of Rising Ashes",
     },
     {
         name = "Tobias",
-        hint = "Secrets of Azeroth event chain",
+        hint = "Secrets of Azeroth / Community Rumor Mill",
         type = "pet",
         id = 4263,
-        waypoint = { 84, 0.76, 0.18 }, -- Stormwind
+        waypoint = {  }, -- Stormwind
         record = "Record of Rumors",
     },
     {
         name = "Sun Darter Hatchling",
-        hint = "Cavern of Consumption buff puzzle",
+        hint = "Hidden within the Caverns of Consumption",
         type = "pet",
         id = 382,
-        waypoint = { 71, 0.65, 0.58 }, -- Tanaris
+        waypoint = { 12, 57.2, 13.9}, -- Tanaris
         record = "Record of the Caverns of Consumption",
     },
 
     -- TOYS (2)
     {
         name = "Lost Obsidian Cache",
-        hint = "Black Dragon challenge in Waking Shores",
+        hint = "Secret treasure found in the Waking Shores on the Dragon Isles",
         type = "toy",
         id = 201933,
-        waypoint = { 2022, 0.25, 0.72 }, -- Waking Shores
+        waypoint = { 2022, 43.7, 71.7 }, -- Waking Shores
         record = "Record of Lost Obsidian Treasures",
     },
     {
         name = "Enlightened Hearthstone",
-        hint = "Zereth Mortis community puzzle",
+        hint = "The Ponderer's Portal has opened. - 6 player co-op puzzle in Zereth Mortis",
         type = "toy",
         id = 190196,
-        waypoint = { 1970, 0.34, 0.55 }, -- Zereth Mortis
+        waypoint = { 1970, 47.54, 50.05}, -- Zereth Mortis
         record = "Record of Collaborative Cogitation",
     },
 
     -- TRANSMOG (1)
     {
         name = "Waist of Time",
-        hint = "Tanaris desert mystery",
+        hint = "Must have Baal and Uuna, then you will have to interact with hidden objects scattered across Azeroth, Outland and Draenor.",
         type = "transmog",
         id = 162690,
-        waypoint = { 71, 0.64, 0.50 }, -- Tanaris
+        waypoint = { 542, 35.5, 32 }, -- 
         record = "Record of Time Wasted",
     },
 
     -- QUEST (1)
     {
         name = "Wan'be's Buried Goods",
-        hint = "Treasure hunt chain in Vol'dun",
+        hint = "Horde only treasure hunt.  Talk to Hoarder Jena in Voldun",
         type = "quest",
         id = 53657,
-        waypoint = { 864, 0.47, 0.88 }, -- Vol'dun
+        waypoint = { 864, 56.6, 49.8 }, 
         record = "Record of Buried Treasure",
     },
 
     -- ACHIEVEMENT (1)
     {
         name = "Memory of Scholomance",
-        hint = "Defeat Scholomance bosses with Krastinov's Bag",
+        hint = "Defeat Scholomance bosses with Krastinovs Bag, then find Evas journal",
         type = "achievement",
         id = 18368,
-        waypoint = { 22, 0.69, 0.73 }, -- Western Plaguelands
+        waypoint = { 22, 70, 75 }, -- Western Plaguelands
         record = "Record of Necromantic Knowledge",
     },
 }
