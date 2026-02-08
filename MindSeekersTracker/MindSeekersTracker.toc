@@ -2,7 +2,7 @@
 ## Title: Mind-Seekers Tracker
 ## Notes: Track progress toward the Mind-Seeker Feat of Strength (17/31 WoW secrets)
 ## Author: hatdragon
-## Version: 1.0
+## Version: r1.0.3
 ## SavedVariables: MindSeekersTrackerDB
 ## X-Curse-Project-ID: 1456838
 ## X-Wago-ID: kGryqXKy

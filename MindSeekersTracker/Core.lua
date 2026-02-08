@@ -2,7 +2,17 @@ local addonName, ns = ...
 
 local frame = CreateFrame("Frame")
 ns.completedCount = 0
+ns.confirmedCount = 0
 ns.results = {}
+ns.confirmed = {}
+
+-- Build reverse lookup: "Record of XXXX" -> secret index
+ns.recordLookup = {}
+for i, secret in ipairs(ns.secrets) do
+    if secret.record then
+        ns.recordLookup[secret.record] = i
+    end
+end
 
 -- Detection logic per secret type
 local function CheckSecret(secret)
@@ -38,6 +48,47 @@ function ns:CheckAllSecrets()
     ns.completedCount = count
     return ns.results, count
 end
+
+-- Scan the active tooltip for Record holograms in the Seat of Knowledge (mapID 947)
+local SEAT_OF_KNOWLEDGE_MAP = 947
+
+function ns:ScanTooltipForRecord()
+    if not WorldMapFrame then return end
+    local mapID = WorldMapFrame:GetMapID()
+    if mapID ~= SEAT_OF_KNOWLEDGE_MAP then return end
+
+    local line = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    if not line then return end
+
+    local idx = ns.recordLookup[line]
+    if not idx then return end
+    if ns.confirmed[idx] then return end
+
+    ns.confirmed[idx] = true
+    ns.confirmedCount = ns.confirmedCount + 1
+    local db = ns:GetDB()
+    db.confirmed = db.confirmed or {}
+    db.confirmed[idx] = true
+
+    if ns.RefreshUI then
+        ns:RefreshUI()
+    end
+    print("|cff00ccffMind-Seekers Tracker:|r Confirmed: " .. ns.secrets[idx].name)
+end
+
+-- Hook GameTooltip to detect Record holograms via text change detection
+local lastScannedText = nil
+GameTooltip:HookScript("OnUpdate", function(self)
+    if not self:IsShown() then return end
+    local text = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    if text and text ~= lastScannedText then
+        lastScannedText = text
+        ns:ScanTooltipForRecord()
+    end
+end)
+GameTooltip:HookScript("OnHide", function()
+    lastScannedText = nil
+end)
 
 -- Debug: print raw API results for every secret so we can find bad IDs
 local function DebugSecrets()
@@ -100,7 +151,18 @@ end
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
-        ns:GetDB()
+        local db = ns:GetDB()
+        -- Restore confirmed state from saved variables
+        if db.confirmed then
+            local count = 0
+            for idx, val in pairs(db.confirmed) do
+                if val then
+                    ns.confirmed[idx] = true
+                    count = count + 1
+                end
+            end
+            ns.confirmedCount = count
+        end
         ns:CheckAllSecrets()
         if ns.BuildUI then
             ns:BuildUI()

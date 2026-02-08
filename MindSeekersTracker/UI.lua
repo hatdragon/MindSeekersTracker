@@ -8,7 +8,8 @@ local MAX_VISIBLE_ROWS = 16
 local SCROLL_STEP = 3
 
 local COLORS = {
-    done = { 0.3, 1.0, 0.3 },
+    done = { 0.3, 1.0, 0.3 },           -- Green: confirmed via hologram
+    unconfirmed = { 1.0, 0.82, 0.0 },    -- Yellow: detected but not yet confirmed
     todo = { 1.0, 1.0, 1.0 },
     hint = { 0.6, 0.6, 0.6 },
     title = { 0.6, 0.85, 1.0 },
@@ -36,18 +37,21 @@ local PEARL_SAFE_WP  = { mapID = 203, x = 0.2645, y = 0.6620 }  -- Safe spot bef
 local BANNER_HEIGHT = 40
 
 local function GetSortedIndices()
-    local incomplete, complete = {}, {}
+    local incomplete, unconfirmed, confirmed = {}, {}, {}
     for i, secret in ipairs(ns.secrets) do
-        if ns.results[i] then
-            table.insert(complete, i)
+        if ns.confirmed[i] then
+            table.insert(confirmed, i)
+        elseif ns.results[i] then
+            table.insert(unconfirmed, i)
         else
             table.insert(incomplete, i)
         end
     end
-    -- Incomplete first, then complete; preserve original order within each group
+    -- Incomplete first, then unconfirmed (yellow), then confirmed (green)
     local sorted = {}
     for _, idx in ipairs(incomplete) do table.insert(sorted, idx) end
-    for _, idx in ipairs(complete) do table.insert(sorted, idx) end
+    for _, idx in ipairs(unconfirmed) do table.insert(sorted, idx) end
+    for _, idx in ipairs(confirmed) do table.insert(sorted, idx) end
     return sorted
 end
 
@@ -144,9 +148,13 @@ function ns:BuildUI()
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
         GameTooltip:AddLine("Mind-Seeker Notes", 0.6, 0.85, 1.0)
         GameTooltip:AddLine(" ")
-        GameTooltip:AddLine("Progress toward the Mind-Seeker achievement is only awarded by solving the secrets. Pets purchased from the Auction House do not count; you can check the holograms to confirm whether you've completed the secrets for Phoenix Wishwing and Courage.", 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine("|cff4ce64cGreen|r = Confirmed via hologram in the Seat of Knowledge", 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine("|cffd1d100Yellow|r = Detected (you have the item) but not yet confirmed", 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine("|cffff4d4dRed|r = Incomplete", 0.8, 0.8, 0.8, true)
         GameTooltip:AddLine(" ")
-        GameTooltip:AddLine("The hidden tracking quest for the Sun Darter Hatchling currently resets weekly due to a bug.", 1, 0.5, 0.3, true)
+        GameTooltip:AddLine("Hover over the Record holograms in the Seat of Knowledge to confirm your completed secrets. AH purchases (e.g. Phoenix Wishwing, Courage) won't show holograms.", 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddLine("The hidden tracking quest for the Sun Darter Hatchling currently resets weekly due to a bug. Once confirmed via hologram, it stays green.", 1, 0.5, 0.3, true)
         GameTooltip:Show()
     end)
     infoBtn:SetScript("OnLeave", function(self)
@@ -187,6 +195,7 @@ function ns:BuildUI()
     bannerLine1:SetPoint("TOP", banner, "TOP", 0, -5)
     bannerLine1:SetTextColor(0.3, 1.0, 0.3)
     bannerLine1:SetText("Go to the Pearl of the Abyss!")
+    ns.bannerLine1 = bannerLine1
 
     local bannerLine2 = banner:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     bannerLine2:SetPoint("TOP", bannerLine1, "BOTTOM", 0, -2)
@@ -261,7 +270,7 @@ function ns:BuildUI()
         row:SetScript("OnClick", function(self)
             if self.secretIndex then
                 local secret = ns.secrets[self.secretIndex]
-                if secret and not ns.results[self.secretIndex] then
+                if secret and not ns.results[self.secretIndex] and not ns.confirmed[self.secretIndex] then
                     SetTomTomWaypoint(secret)
                 end
             end
@@ -275,7 +284,14 @@ function ns:BuildUI()
             GameTooltip:SetOwner(self, "ANCHOR_LEFT")
             GameTooltip:ClearLines()
 
-            local status = ns.results[self.secretIndex] and "|cff00ff00Completed|r" or "|cffff4444Incomplete|r"
+            local status
+            if ns.confirmed[self.secretIndex] then
+                status = "|cff00ff00Confirmed|r"
+            elseif ns.results[self.secretIndex] then
+                status = "|cffd1d100Detected — not yet confirmed|r"
+            else
+                status = "|cffff4444Incomplete|r"
+            end
             GameTooltip:AddLine(secret.name, unpack(COLORS.title))
             GameTooltip:AddLine(status, 1, 1, 1)
             GameTooltip:AddLine(" ")
@@ -290,7 +306,7 @@ function ns:BuildUI()
                     0.8, 0.8, 0.5)
             end
 
-            if not ns.results[self.secretIndex] then
+            if not ns.results[self.secretIndex] and not ns.confirmed[self.secretIndex] then
                 GameTooltip:AddLine(" ")
                 if TomTom and TomTom.AddWaypoint then
                     GameTooltip:AddLine("Click to set TomTom waypoint", 0.2, 1, 0.2)
@@ -338,13 +354,14 @@ end
 function ns:RefreshUI()
     if not ns.tracker then return end
     local db = ns:GetDB()
-    local needed = math.max(0, 17 - ns.completedCount)
-
-    -- Update title
+    -- Update title with confirmed vs detected status
     local titleStr = "Mind-Seeker (" .. ns.completedCount .. "/31)"
-    if ns.completedCount >= 17 then
+    if ns.confirmedCount >= 17 then
         titleStr = titleStr .. " |cff00ff00Ready!|r"
+    elseif ns.completedCount >= 17 then
+        titleStr = titleStr .. " |cffd1d100Ready?|r"
     else
+        local needed = math.max(0, 17 - ns.completedCount)
         titleStr = titleStr .. " — need " .. needed
     end
     ns.titleText:SetText(titleStr)
@@ -360,11 +377,18 @@ function ns:RefreshUI()
         ns.content:Show()
         ns.sortedIndices = GetSortedIndices()
 
-        -- Show/hide ready banner
+        -- Show/hide ready banner (yellow if detected 17+, green if confirmed 17+)
         local bannerOffset = 0
         if ns.completedCount >= 17 and ns.banner then
             ns.banner:Show()
             bannerOffset = BANNER_HEIGHT
+            if ns.confirmedCount >= 17 then
+                ns.banner:SetBackdropColor(0.1, 0.25, 0.1, 0.9)
+                ns.bannerLine1:SetTextColor(0.3, 1.0, 0.3)
+            else
+                ns.banner:SetBackdropColor(0.25, 0.2, 0.05, 0.9)
+                ns.bannerLine1:SetTextColor(1.0, 0.82, 0.0)
+            end
         elseif ns.banner then
             ns.banner:Hide()
         end
@@ -397,12 +421,21 @@ function ns:RefreshRows()
             local done = ns.results[secretIdx]
             row.secretIndex = secretIdx
 
-            if done then
+            local confirmed = ns.confirmed[secretIdx]
+            if confirmed then
+                -- Green: confirmed via hologram in Seat of Knowledge
                 row.icon:SetText("|cff4ce64cO|r")
                 row.icon:SetTextColor(0.3, 1.0, 0.3)
                 row.name:SetText(secret.name)
                 row.name:SetTextColor(0.4, 0.7, 0.4)
+            elseif done then
+                -- Yellow: detected (have the collectible) but not confirmed
+                row.icon:SetText("|cffd1d100O|r")
+                row.icon:SetTextColor(1.0, 0.82, 0.0)
+                row.name:SetText(secret.name)
+                row.name:SetTextColor(0.8, 0.65, 0.1)
             else
+                -- Red: incomplete
                 row.icon:SetText("|cffff4d4dX|r")
                 row.icon:SetTextColor(1.0, 0.3, 0.3)
                 row.name:SetText(secret.name)
