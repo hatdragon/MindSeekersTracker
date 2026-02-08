@@ -63,7 +63,8 @@ function ns:ScanTooltipForRecord()
     local mapID = WorldMapFrame:GetMapID()
     if mapID ~= SEAT_OF_KNOWLEDGE_MAP then return end
 
-    local line = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    local raw = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    local line = raw and tostring(raw)
     if not line then return end
 
     local idx = ns.recordLookup[line]
@@ -86,7 +87,9 @@ end
 local lastScannedText = nil
 GameTooltip:HookScript("OnUpdate", function(self)
     if not self:IsShown() then return end
-    local text = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    if not WorldMapFrame or WorldMapFrame:GetMapID() ~= SEAT_OF_KNOWLEDGE_MAP then return end
+    local raw = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
+    local text = raw and tostring(raw)
     if text and text ~= lastScannedText then
         lastScannedText = text
         ns:ScanTooltipForRecord()
