@@ -21,14 +21,18 @@ local COLORS = {
 
 -- Map ID to zone name for /way display
 local MAP_NAMES = {
-    [1] = "Durotar", [13] = "Vashj'ir", [22] = "Western Plaguelands",
-    [42] = "Deadwind Pass", [71] = "Tanaris", [84] = "Stormwind City",
-    [627] = "Dalaran", [630] = "Azsuna", [790] = "Eye of Azshara",
-    [863] = "Nazmir", [864] = "Vol'dun", [885] = "Antoran Wastes",
-    [896] = "Drustvar", [942] = "Stormsong Valley", [1355] = "Nazjatar",
-    [1525] = "Revendreth", [1533] = "Bastion", [1543] = "The Maw",
-    [1674] = "Plaguefall", [1970] = "Zereth Mortis", [2022] = "Waking Shores",
+    [1] = "Durotar", [12] = "Winterspring", [13] = "Vashj'ir",
+    [22] = "Western Plaguelands", [42] = "Deadwind Pass", [71] = "Tanaris",
+    [84] = "Stormwind City", [116] = "Stormheim", [210] = "The Storm Peaks",
+    [542] = "Spires of Arak", [627] = "Dalaran", [630] = "Azsuna",
+    [646] = "Broken Shore", [790] = "Eye of Azshara", [863] = "Nazmir",
+    [864] = "Vol'dun", [885] = "Antoran Wastes", [896] = "Drustvar",
+    [942] = "Stormsong Valley", [1355] = "Nazjatar", [1525] = "Revendreth",
+    [1533] = "Bastion", [1543] = "The Maw", [1674] = "Plaguefall",
+    [1970] = "Zereth Mortis", [2022] = "Waking Shores", [2023] = "Ohn'ahran Plains",
     [2024] = "Azure Span", [2073] = "Uldaman", [2248] = "Isle of Dorn",
+    [2339] = "Dornogal", [2371] = "Manaforge Omega",
+    [2375] = "Siren Isle", [2404] = "Hallowfall",
 }
 
 -- Pearl of the Abyss: the final destination when 17+ secrets are done
@@ -55,16 +59,26 @@ local function GetSortedIndices()
     return sorted
 end
 
+local function HasWaypoint(secret)
+    return secret.waypoint and secret.waypoint[1] ~= nil
+end
+
 local function SetTomTomWaypoint(secret)
-    if not secret.waypoint then return end
+    if not HasWaypoint(secret) then return end
     local mapID, x, y = secret.waypoint[1], secret.waypoint[2], secret.waypoint[3]
-    if TomTom and TomTom.AddWaypoint then
-        TomTom:AddWaypoint(mapID, x, y, { title = secret.name })
+    -- TomTom needs numeric mapID and 0-1 coords; skip if mapID is a string
+    if TomTom and TomTom.AddWaypoint and type(mapID) == "number" then
+        -- Normalize coords: if > 1, they're in xx.x format, convert to 0-1
+        local tx = x > 1 and (x / 100) or x
+        local ty = y > 1 and (y / 100) or y
+        TomTom:AddWaypoint(mapID, tx, ty, { title = secret.name })
         print("|cff00ccffMind-Seekers Tracker:|r Waypoint set for " .. secret.name)
     else
-        local zoneName = MAP_NAMES[mapID] or ("Map " .. mapID)
+        local zoneName = type(mapID) == "string" and mapID or (MAP_NAMES[mapID] or ("Map " .. mapID))
+        local dx = x > 1 and x or (x * 100)
+        local dy = y > 1 and y or (y * 100)
         print("|cff00ccffMind-Seekers Tracker:|r TomTom not found. Use: /way " ..
-            zoneName .. " " .. string.format("%.1f", x * 100) .. " " .. string.format("%.1f", y * 100))
+            zoneName .. " " .. string.format("%.1f", dx) .. " " .. string.format("%.1f", dy))
     end
 end
 
@@ -297,12 +311,12 @@ function ns:BuildUI()
             GameTooltip:AddLine(" ")
             GameTooltip:AddLine(secret.hint, unpack(COLORS.hint))
 
-            if secret.waypoint then
+            if HasWaypoint(secret) then
                 local mapID, x, y = secret.waypoint[1], secret.waypoint[2], secret.waypoint[3]
-                local zoneName = MAP_NAMES[mapID] or ("Map " .. mapID)
+                local zoneName = type(mapID) == "string" and mapID or (MAP_NAMES[mapID] or ("Map " .. mapID))
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine("/way " .. zoneName .. " " ..
-                    string.format("%.1f", x * 100) .. " " .. string.format("%.1f", y * 100),
+                    string.format("%.1f", x) .. " " .. string.format("%.1f", y),
                     0.8, 0.8, 0.5)
             end
 

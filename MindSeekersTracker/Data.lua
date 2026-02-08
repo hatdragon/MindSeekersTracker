@@ -41,7 +41,7 @@ ns.secrets = {
         hint = "To start the secret you will first have to purchase Talisman of True Treasure Tracking from Griftah in Shattrath.",
         type = "mount",
         id = 1025,
-        waypoint = { "Shattrath", 65, 69 },
+        waypoint = { "Shattrath", 65.0, 69.0 },
         record = "Record of the Hivemind",
     },
     {
@@ -57,7 +57,7 @@ ns.secrets = {
         hint = "Unlock Mrrl and get access to his Secret Stash",
         type = "mount",
         id = 1260,
-        waypoint = { "Nazjatar", 48, 45 }, -- Nazjatar
+        waypoint = { "Nazjatar", 48.0, 45.0 }, -- Nazjatar
         record = "Record of a Grggly Stash",
     },
     {
