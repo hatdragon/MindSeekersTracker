@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "r*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Determine version from tag
+        id: ver
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#r}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify addon folder exists
+        run: |
+          test -d "MindSeekersTracker" || (echo "Expected ./MindSeekersTracker addon folder not found" && exit 1)
+          test -f "MindSeekersTracker/MindSeekersTracker.toc" || (echo "Expected MindSeekersTracker/MindSeekersTracker.toc not found" && exit 1)
+
+      - name: Build zip (Retail)
+        run: |
+          mkdir -p dist
+          # Zip the folder itself so the archive contains MindSeekersTracker/...
+          zip -r "dist/MindSeekersTracker-${{ steps.ver.outputs.tag }}.zip" "MindSeekersTracker" \
+            -x "*.psd" "*.xcf" "*.blend" \
+            -x "*.kra" "*.aseprite" \
+            -x "*.zip" "*.7z" "*.rar" \
+            -x "**/.DS_Store" "**/Thumbs.db"
+
+      - name: Verify zip structure
+        run: |
+          unzip -l "dist/MindSeekersTracker-${{ steps.ver.outputs.tag }}.zip" | head -n 30
+          unzip -l "dist/MindSeekersTracker-${{ steps.ver.outputs.tag }}.zip" | grep -q "^ *.* MindSeekersTracker/MindSeekersTracker.toc$" \
+            || (echo "Zip missing MindSeekersTracker/MindSeekersTracker.toc" && exit 1)
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: MindSeekersTracker ${{ steps.ver.outputs.tag }}
+          tag_name: ${{ steps.ver.outputs.tag }}
+          files: |
+            dist/MindSeekersTracker-${{ steps.ver.outputs.tag }}.zip
+          generate_release_notes: true
