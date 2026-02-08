@@ -1,0 +1,155 @@
+local addonName, ns = ...
+
+local frame = CreateFrame("Frame")
+ns.completedCount = 0
+ns.results = {}
+
+-- Detection logic per secret type
+local function CheckSecret(secret)
+    local t, id = secret.type, secret.id
+    if t == "mount" then
+        local _, _, _, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(id)
+        return isCollected or false
+    elseif t == "pet" then
+        local numCollected = C_PetJournal.GetNumCollectedInfo(id)
+        return (numCollected or 0) > 0
+    elseif t == "toy" then
+        return PlayerHasToy(id)
+    elseif t == "quest" then
+        return C_QuestLog.IsQuestFlaggedCompleted(id)
+    elseif t == "transmog" then
+        return C_TransmogCollection.PlayerHasTransmogByItemInfo(id)
+    elseif t == "achievement" then
+        local _, _, _, completed = GetAchievementInfo(id)
+        return completed or false
+    end
+    return false
+end
+
+function ns:CheckAllSecrets()
+    local count = 0
+    for i, secret in ipairs(ns.secrets) do
+        local done = CheckSecret(secret)
+        ns.results[i] = done
+        if done then
+            count = count + 1
+        end
+    end
+    ns.completedCount = count
+    return ns.results, count
+end
+
+-- Debug: print raw API results for every secret so we can find bad IDs
+local function DebugSecrets()
+    local PREFIX = "|cff00ccffMST Debug:|r "
+    for i, s in ipairs(ns.secrets) do
+        local t, id = s.type, s.id
+        local raw, result
+        if t == "mount" then
+            local name, _, _, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(id)
+            raw = ("name=%s collected=%s"):format(tostring(name), tostring(isCollected))
+            result = isCollected or false
+        elseif t == "pet" then
+            local numCollected, numMax = C_PetJournal.GetNumCollectedInfo(id)
+            raw = ("collected=%s max=%s"):format(tostring(numCollected), tostring(numMax))
+            result = (numCollected or 0) > 0
+        elseif t == "toy" then
+            local has = PlayerHasToy(id)
+            raw = ("hasToy=%s"):format(tostring(has))
+            result = has
+        elseif t == "quest" then
+            local done = C_QuestLog.IsQuestFlaggedCompleted(id)
+            raw = ("questDone=%s"):format(tostring(done))
+            result = done
+        elseif t == "transmog" then
+            local has = C_TransmogCollection.PlayerHasTransmogByItemInfo(id)
+            raw = ("hasTransmog=%s"):format(tostring(has))
+            result = has
+        elseif t == "achievement" then
+            local _, achName, _, completed = GetAchievementInfo(id)
+            raw = ("achName=%s completed=%s"):format(tostring(achName), tostring(completed))
+            result = completed or false
+        end
+        local status = result and "|cff00ff00YES|r" or "|cffff4444NO|r"
+        print(PREFIX .. ("%d. %s [%s id=%s] %s — %s"):format(i, s.name, t, tostring(id), status, raw or "?"))
+    end
+end
+
+-- Saved variables defaults
+local defaults = {
+    point = "RIGHT",
+    x = -50,
+    y = 0,
+    shown = true,
+    collapsed = false,
+}
+
+function ns:GetDB()
+    if not MindSeekersTrackerDB then
+        MindSeekersTrackerDB = {}
+    end
+    for k, v in pairs(defaults) do
+        if MindSeekersTrackerDB[k] == nil then
+            MindSeekersTrackerDB[k] = v
+        end
+    end
+    return MindSeekersTrackerDB
+end
+
+-- Event handling
+frame:RegisterEvent("PLAYER_LOGIN")
+frame:SetScript("OnEvent", function(self, event, ...)
+    if event == "PLAYER_LOGIN" then
+        ns:GetDB()
+        ns:CheckAllSecrets()
+        if ns.BuildUI then
+            ns:BuildUI()
+        end
+        self:RegisterEvent("NEW_MOUNT_ADDED")
+        self:RegisterEvent("NEW_PET_ADDED")
+        self:RegisterEvent("QUEST_TURNED_IN")
+        self:RegisterEvent("NEW_TOY_ADDED")
+        self:RegisterEvent("TRANSMOG_COLLECTION_UPDATED")
+        self:RegisterEvent("ACHIEVEMENT_EARNED")
+    else
+        ns:CheckAllSecrets()
+        if ns.RefreshUI then
+            ns:RefreshUI()
+        end
+    end
+end)
+
+-- Slash commands
+SLASH_MINDSEEKER1 = "/mst"
+SLASH_MINDSEEKER2 = "/mindseeker"
+SlashCmdList["MINDSEEKER"] = function(msg)
+    msg = strtrim(msg):lower()
+    if msg == "reset" then
+        local db = ns:GetDB()
+        db.point = defaults.point
+        db.x = defaults.x
+        db.y = defaults.y
+        if ns.tracker then
+            ns.tracker:ClearAllPoints()
+            ns.tracker:SetPoint(db.point, UIParent, db.point, db.x, db.y)
+        end
+        print("|cff00ccffMind-Seekers Tracker:|r Position reset.")
+        return
+    end
+    if msg == "debug" then
+        DebugSecrets()
+        return
+    end
+    if ns.tracker then
+        local db = ns:GetDB()
+        if ns.tracker:IsShown() then
+            ns.tracker:Hide()
+            db.shown = false
+        else
+            ns:CheckAllSecrets()
+            ns:RefreshUI()
+            ns.tracker:Show()
+            db.shown = true
+        end
+    end
+end

@@ -1,0 +1,10 @@
+## Interface: 120000, 120001
+## Title: Mind-Seekers Tracker
+## Notes: Track progress toward the Mind-Seeker Feat of Strength (17/31 WoW secrets)
+## Author: hatdragon
+## Version: 1.0
+## SavedVariables: MindSeekersTrackerDB
+
+Data.lua
+Core.lua
+UI.lua
