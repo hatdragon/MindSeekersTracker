@@ -85,6 +85,7 @@ end
 
 -- Hook GameTooltip to detect Record holograms via text change detection
 local lastScannedText = nil
+local scanDebug = false
 GameTooltip:HookScript("OnUpdate", function(self)
     if not self:IsShown() then return end
     if not WorldMapFrame or WorldMapFrame:GetMapID() ~= SEAT_OF_KNOWLEDGE_MAP then return end
@@ -92,6 +93,11 @@ GameTooltip:HookScript("OnUpdate", function(self)
     local text = raw and tostring(raw)
     if text and text ~= lastScannedText then
         lastScannedText = text
+        if scanDebug then
+            local mapID = WorldMapFrame:GetMapID()
+            local match = ns.recordLookup[text] and "MATCH" or "no match"
+            print(("|cff00ccffMST Scan:|r mapID=%d text=\"%s\" [%s]"):format(mapID, text, match))
+        end
         ns:ScanTooltipForRecord()
     end
 end)
