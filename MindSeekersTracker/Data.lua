@@ -6,10 +6,10 @@ ns.secrets = {
     -- MOUNTS (17)
     {
         name = "Long-Forgotten Hippogryph",
-        hint = "Find 5 Ephemeral Crystals in Azsuna",
+        hint = "Find 5 Ephemeral Crystals in Azsuna scattered around the area.",
         type = "mount",
         id = 802,
-        waypoint = { 630, 0.29, 0.14 }, -- Azsuna
+        waypoint = { 630, 54.0, 33.0 }, -- Azsuna
         record = "Record of Ephemeral Crystals",
     },
     {
@@ -25,7 +25,7 @@ ns.secrets = {
         hint = "For this secret, you will have to locate hidden pages scattered across Azeroth.",
         type = "mount",
         id = 947,
-        waypoint = { }, -- Dalaran (Broken Isles)
+        waypoint = { 627, 14.0, 29.6 }, -- Dalaran (Broken Isles)
         record = "Record of the Riddler",
     },
     {
@@ -33,7 +33,7 @@ ns.secrets = {
         hint = "The Mind-Seekers seem to have a penchant for leaving their notes in obvious places. Look around in Curiosities & Moore in Dalaran.",
         type = "mount",
         id = 961,
-        waypoint = { }, 
+        waypoint = { 627, 48.37, 57.53 }, 
         record = "Record of the Endless Nightmare",
     },
     {
@@ -41,7 +41,7 @@ ns.secrets = {
         hint = "To start the secret you will first have to purchase Talisman of True Treasure Tracking from Griftah in Shattrath.",
         type = "mount",
         id = 1025,
-        waypoint = { "Shattrath", 65.0, 69.0 },
+        waypoint = { 111, 65.0, 69.0 },
         record = "Record of the Hivemind",
     },
     {
@@ -49,7 +49,7 @@ ns.secrets = {
         hint = "Combine Crystals at the Altar of the Abyss",
         type = "mount",
         id = 1057,
-        waypoint = { "Stormsong Valley", 46.6, 36.2 }, -- Stormsong Valley
+        waypoint = { 863, 46.6, 36.2 }, -- Stormsong Valley
         record = "Record of Abyssal Blood",
     },
     {
@@ -57,7 +57,7 @@ ns.secrets = {
         hint = "Unlock Mrrl and get access to his Secret Stash",
         type = "mount",
         id = 1260,
-        waypoint = { "Nazjatar", 48.0, 45.0 }, -- Nazjatar
+        waypoint = { 1355, 48.0, 45.0 }, -- Nazjatar
         record = "Record of a Grggly Stash",
     },
     {
@@ -65,7 +65,7 @@ ns.secrets = {
         hint = "6-day quest chain in Revendreth",
         type = "mount",
         id = 1414,
-        waypoint = { 1525, 0.63, 0.43 }, -- Revendreth
+        waypoint = { 1525, 63.13, 43.11 }, -- Revendreth 
         record = "Record of a Bad Horse",
     },
     {
@@ -81,7 +81,7 @@ ns.secrets = {
         hint = "All the way to the end of Plaguefall, then turn around and look behind you",
         type = "mount",
         id = 1445,
-        waypoint = {  }, -- Plaguefall
+        waypoint = { 1536, 59.30, 64.84 }, -- Plaguefall
         record = "Record of the Secrets Behind You",
     },
     {
@@ -102,7 +102,7 @@ ns.secrets = {
     },
     {
         name = "Otto",
-        hint = "The Way to an Otto's Heart",
+        hint = "The Way to an Otto's Heart - The Great Swog has something you'll need.",
         type = "mount",
         id = 1656,
         waypoint = { 2023, 82.2, 73.2 }, -- Azure Span
@@ -113,7 +113,7 @@ ns.secrets = {
         hint = "To forge Mimiron's Jumpjets you have to find 3 booster parts and then combine them.",
         type = "mount",
         id = 1813,
-        waypoint = { 210, 59.4, 79.0 },
+        waypoint = { 120, 59.4, 79.0 }, -- The Storm Peaks
         record = "Record of Mimiron's Master Mind",
     },
     {
@@ -129,7 +129,7 @@ ns.secrets = {
         hint = "Equip one Faceless Mask and enter the Horrific Vision of Stormwind.",
         type = "mount",
         id = 1948,
-        waypoint = { 2404, 62.0, 30.4 }, -- Isle of Dorn
+        waypoint = { 2339, 34.77, 68.51 }, -- Isle of Dorn
         record = "Record of Visions of Void",
     },
     {
@@ -144,10 +144,10 @@ ns.secrets = {
     -- PETS (9)
     {
         name = "Uuna",
-        hint = "For this secret the reward is hugs, and the gratitude of a little girl.",
+        hint = "For this secret the reward is hugs, and the gratitude of a little girl. Get the doll from The Many-Faced Devourer",
         type = "pet",
         id = 2136,
-        waypoint = { 885, 52.0, 38.0  }, -- Antoran Wastes
+        waypoint = { 885, 54.8, 39.0  }, -- Antoran Wastes
         record = "Record of a Friend in the Darkness",
     },
     {
@@ -155,7 +155,7 @@ ns.secrets = {
         hint = "Be done with Uuna and the find conspicuous note and dark pebbles across Azeroth",
         type = "pet",
         id = 2352,
-        waypoint = { 863, 46.4, 54.0}, -- Stormsong Valley
+        waypoint = { 863, 51.8, 59.1}, -- Nazmir
         record = "Record of Ominously Ordinary Pebbles",
     },
     {
@@ -163,7 +163,7 @@ ns.secrets = {
         hint = "Drustvar ritual collectibles - created by combining several items",
         type = "pet",
         id = 2411,
-        waypoint = { 896, 0.55, 0.31 }, -- Drustvar
+        waypoint = { 896, 18.5, 51.3 }, -- Drustvar
         record = "Record of Drust Rituals",
     },
     {
@@ -171,7 +171,7 @@ ns.secrets = {
         hint = "Locate Amara Lunastar",
         type = "pet",
         id = 2795,
-        waypoint = { "Ashenvale",17.4,49.3 }, -- Deadwind Pass
+        waypoint = { 62, 17.4, 49.3 }, 
         record = "Record of Karazhan's Kitten",
     },
     {
@@ -211,14 +211,14 @@ ns.secrets = {
         hint = "Hidden within the Caverns of Consumption",
         type = "pet",
         id = 382,
-        waypoint = { 12, 57.2, 13.9}, -- Tanaris
+        waypoint = { 83, 57.2, 13.9 }, -- Winterspring
         record = "Record of the Caverns of Consumption",
     },
 
     -- TOYS (2)
     {
         name = "Lost Obsidian Cache",
-        hint = "Secret treasure found in the Waking Shores on the Dragon Isles",
+        hint = "Secret treasure found in the Waking Shores on the Dragon Isles, Starts with apples...",
         type = "toy",
         id = 201933,
         waypoint = { 2022, 43.7, 71.7 }, -- Waking Shores
@@ -239,17 +239,17 @@ ns.secrets = {
         hint = "Must have Baal and Uuna, then you will have to interact with hidden objects scattered across Azeroth, Outland and Draenor.",
         type = "transmog",
         id = 162690,
-        waypoint = { 542, 35.5, 32 }, -- 
+        waypoint = { 542, 35.5, 32.0 }, -- 
         record = "Record of Time Wasted",
     },
 
     -- QUEST (1)
     {
         name = "Wan'be's Buried Goods",
-        hint = "Horde only treasure hunt.  Talk to Hoarder Jena in Voldun",
+        hint = "Horde only treasure hunt.  Talk to Hoarder Jena in Voldun and get the ghostly explorer's skull.",
         type = "quest",
         id = 53657,
-        waypoint = { 864, 56.6, 49.8 }, 
+        waypoint = { 864, 56.6, 49.8}, 
         record = "Record of Buried Treasure",
     },
 
@@ -259,7 +259,7 @@ ns.secrets = {
         hint = "Defeat Scholomance bosses with Krastinovs Bag, then find Evas journal",
         type = "achievement",
         id = 18368,
-        waypoint = { 22, 70, 75 }, -- Western Plaguelands
+        waypoint = { 22, 70.0, 75.0 }, -- Western Plaguelands
         record = "Record of Necromantic Knowledge",
     },
 }

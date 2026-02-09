@@ -21,18 +21,15 @@ local COLORS = {
 
 -- Map ID to zone name for /way display
 local MAP_NAMES = {
-    [1] = "Durotar", [12] = "Winterspring", [13] = "Vashj'ir",
-    [22] = "Western Plaguelands", [42] = "Deadwind Pass", [71] = "Tanaris",
-    [84] = "Stormwind City", [116] = "Stormheim", [210] = "The Storm Peaks",
+    [22] = "Western Plaguelands", [62] = "Darkshore", [83] = "Winterspring",
+    [111] = "Shattrath City", [116] = "Grizzly Hills", [120] = "The Storm Peaks",
     [542] = "Spires of Arak", [627] = "Dalaran", [630] = "Azsuna",
-    [646] = "Broken Shore", [790] = "Eye of Azshara", [863] = "Nazmir",
-    [864] = "Vol'dun", [885] = "Antoran Wastes", [896] = "Drustvar",
-    [942] = "Stormsong Valley", [1355] = "Nazjatar", [1525] = "Revendreth",
-    [1533] = "Bastion", [1543] = "The Maw", [1674] = "Plaguefall",
-    [1970] = "Zereth Mortis", [2022] = "Waking Shores", [2023] = "Ohn'ahran Plains",
-    [2024] = "Azure Span", [2073] = "Uldaman", [2248] = "Isle of Dorn",
-    [2339] = "Dornogal", [2371] = "Manaforge Omega",
-    [2375] = "Siren Isle", [2404] = "Hallowfall",
+    [646] = "Broken Shore", [863] = "Nazmir", [864] = "Vol'dun",
+    [885] = "Antoran Wastes", [896] = "Drustvar", [1355] = "Nazjatar",
+    [1525] = "Revendreth", [1533] = "Bastion", [1536] = "Maldraxxus",
+    [1543] = "The Maw", [1970] = "Zereth Mortis", [2022] = "Waking Shores",
+    [2023] = "Ohn'ahran Plains", [2339] = "Dornogal", [2371] = "K'aresh",
+    [2375] = "Siren Isle",
 }
 
 -- Pearl of the Abyss: the final destination when 17+ secrets are done
