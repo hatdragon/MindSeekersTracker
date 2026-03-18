@@ -87,6 +87,7 @@ end
 local lastScannedText = nil
 local scanDebug = false
 GameTooltip:HookScript("OnUpdate", function(self)
+    if InCombatLockdown() then return end
     if not self:IsShown() then return end
     if not WorldMapFrame or WorldMapFrame:GetMapID() ~= SEAT_OF_KNOWLEDGE_MAP then return end
     local raw = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
