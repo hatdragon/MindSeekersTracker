@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
--- All 31 secrets required for Mind-Seeker Feat of Strength (achievement 62189)
+-- All 32 secrets required for Mind-Seeker Feat of Strength (achievement 62189)
 -- Detection types: mount, pet, toy, quest, transmog, achievement
 ns.secrets = {
     -- MOUNTS (17)
@@ -213,6 +213,14 @@ ns.secrets = {
         id = 382,
         waypoint = { 83, 57.2, 13.9 }, -- Winterspring
         record = "Record of the Caverns of Consumption",
+    },
+    {
+        name = "Gortham",
+        hint = "In Nexus-Point Xenas, take the left wing toward Kasreth. All 5 party members stand on Corespark Conduits simultaneously, then loot the Netherstorm Structural Cage.",
+        type = "pet",
+        id = 4967,
+        waypoint = { 2405, 52.0, 45.0 }, -- Voidstorm (Nexus-Point Xenas entrance)
+        record = "Record of Cuteness Overloaded",
     },
 
     -- TOYS (2)

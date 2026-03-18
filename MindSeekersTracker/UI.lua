@@ -377,9 +377,9 @@ function ns:RefreshUI()
     -- Update title with achievement / confirmed / detected status
     local titleStr
     if ns.achievementEarned then
-        titleStr = "|cff00ff00Mind-Seeker|r (" .. ns.completedCount .. "/31)"
+        titleStr = "|cff00ff00Mind-Seeker|r (" .. ns.completedCount .. "/" .. #ns.secrets .. ")"
     else
-        titleStr = "Mind-Seeker (" .. ns.completedCount .. "/31)"
+        titleStr = "Mind-Seeker (" .. ns.completedCount .. "/" .. #ns.secrets .. ")"
         if ns.confirmedCount >= 17 then
             titleStr = titleStr .. " |cff00ff00Ready!|r"
         elseif ns.completedCount >= 17 then
