@@ -220,7 +220,7 @@ ns.secrets = {
         type = "pet",
         id = 4967,
         waypoint = { 2405, 52.0, 45.0 }, -- Voidstorm (Nexus-Point Xenas entrance)
-        record = "Record of Cuteness Overloaded",
+        record = "Record of Cuteness Overload",
     },
 
     -- TOYS (2)
