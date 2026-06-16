@@ -58,16 +58,46 @@ end
 -- Scan the active tooltip for Record holograms in the Seat of Knowledge (mapID 947)
 local SEAT_OF_KNOWLEDGE_MAP = 947
 
+-- Match a tooltip line against the record lookup. Strips color codes and
+-- trailing whitespace/punctuation since some hologram tooltips include them.
+local function MatchRecordLine(line)
+    if not line then return nil end
+    local s = tostring(line):gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+    s = s:gsub("^%s+", ""):gsub("[%s%.!]+$", "")
+    if ns.recordLookup[s] then return ns.recordLookup[s] end
+    return nil
+end
+
+local scanDebug = false
+
+-- Walk every visible left-side line on GameTooltip looking for a record name.
+-- Some holograms render the object name on line 1 and the record name on a
+-- later line, so checking only line 1 misses them (e.g. Waist of Time).
+local function FindRecordIndexInTooltip()
+    local matched
+    for i = 1, GameTooltip:NumLines() do
+        local fs = _G["GameTooltipTextLeft" .. i]
+        local text = fs and fs:GetText()
+        if text then
+            local idx = MatchRecordLine(text)
+            if scanDebug then
+                local tag = idx and "MATCH" or "no match"
+                print(("|cff00ccffMST Scan:|r line%d=\"%s\" [%s]"):format(i, tostring(text), tag))
+            end
+            if idx and not matched then
+                matched = idx
+            end
+        end
+    end
+    return matched
+end
+
 function ns:ScanTooltipForRecord()
     if not WorldMapFrame then return end
     local mapID = WorldMapFrame:GetMapID()
     if mapID ~= SEAT_OF_KNOWLEDGE_MAP then return end
 
-    local raw = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
-    local line = raw and tostring(raw)
-    if not line then return end
-
-    local idx = ns.recordLookup[line]
+    local idx = FindRecordIndexInTooltip()
     if not idx then return end
     if ns.confirmed[idx] then return end
 
@@ -83,27 +113,23 @@ function ns:ScanTooltipForRecord()
     print("|cff00ccffMind-Seekers Tracker:|r Confirmed: " .. ns.secrets[idx].name)
 end
 
--- Hook GameTooltip to detect Record holograms via text change detection
-local lastScannedText = nil
-local scanDebug = false
+-- Hook GameTooltip to detect Record holograms. Re-scan when the tooltip's
+-- line count or first-line text changes, so multi-line tooltips that grow
+-- after the initial show still get scanned.
+local lastScanKey = nil
 GameTooltip:HookScript("OnUpdate", function(self)
     if InCombatLockdown() then return end
     if not self:IsShown() then return end
     if not WorldMapFrame or WorldMapFrame:GetMapID() ~= SEAT_OF_KNOWLEDGE_MAP then return end
-    local raw = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText()
-    local text = raw and tostring(raw)
-    if text and text ~= lastScannedText then
-        lastScannedText = text
-        if scanDebug then
-            local mapID = WorldMapFrame:GetMapID()
-            local match = ns.recordLookup[text] and "MATCH" or "no match"
-            print(("|cff00ccffMST Scan:|r mapID=%d text=\"%s\" [%s]"):format(mapID, text, match))
-        end
+    local first = GameTooltipTextLeft1 and GameTooltipTextLeft1:GetText() or ""
+    local key = self:NumLines() .. "|" .. first
+    if key ~= lastScanKey then
+        lastScanKey = key
         ns:ScanTooltipForRecord()
     end
 end)
 GameTooltip:HookScript("OnHide", function()
-    lastScannedText = nil
+    lastScanKey = nil
 end)
 
 -- Debug: print raw API results for every secret so we can find bad IDs

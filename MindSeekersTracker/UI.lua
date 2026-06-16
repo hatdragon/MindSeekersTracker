@@ -32,9 +32,11 @@ local MAP_NAMES = {
     [2375] = "Siren Isle",
 }
 
--- Pearl of the Abyss: the final destination when 17+ secrets are done
-local PEARL_WAYPOINT = { mapID = 203, x = 0.2645, y = 0.7167 }  -- Vashj'ir: Abyssal Depths
-local PEARL_SAFE_WP  = { mapID = 203, x = 0.2645, y = 0.6620 }  -- Safe spot before fatigue
+-- Pearl of the Abyss: the final destination when 17+ secrets are done.
+-- Use the Vashj'ir overall map (#13) since the Pearl sits in the fatigue
+-- zone below Abyssal Depths and this is how players share the location.
+local PEARL_WAYPOINT = { mapID = 13, x = 0.278, y = 0.745 }  -- Pearl
+local PEARL_SAFE_WP  = { mapID = 13, x = 0.278, y = 0.734 }  -- Safe spot before fatigue
 local BANNER_HEIGHT = 40
 
 local function GetSortedIndices()
@@ -232,8 +234,8 @@ function ns:BuildUI()
             print("|cff00ccffMind-Seekers Tracker:|r Waypoints set for Pearl of the Abyss in Vashj'ir")
         else
             print("|cff00ccffMind-Seekers Tracker:|r TomTom not found. Use:")
-            print("  /way Vashj'ir: Abyssal Depths 26.5 66.2  (safe spot)")
-            print("  /way Vashj'ir: Abyssal Depths 26.5 71.7  (pearl)")
+            print("  /way #13 27.8 73.4  (safe spot)")
+            print("  /way #13 27.8 74.5  (pearl)")
         end
     end)
     banner:SetScript("OnEnter", function(self)
@@ -244,8 +246,8 @@ function ns:BuildUI()
         GameTooltip:AddLine("fatigue waters south of the Abyssal Depths.", 0.8, 0.8, 0.8)
         GameTooltip:AddLine("Bring water breathing + aquatic mount!", 1, 0.8, 0.3)
         GameTooltip:AddLine(" ")
-        GameTooltip:AddLine("/way #13 26.45 70.6  Safe Location", 0.8, 0.8, 0.5)
-        GameTooltip:AddLine("/way #13 26.45 71.67  Pearl", 0.8, 0.8, 0.5)
+        GameTooltip:AddLine("/way #13 27.8 73.4  Safe Location", 0.8, 0.8, 0.5)
+        GameTooltip:AddLine("/way #13 27.8 74.5  Pearl", 0.8, 0.8, 0.5)
         GameTooltip:AddLine(" ")
         if TomTom and TomTom.AddWaypoint then
             GameTooltip:AddLine("Click to set TomTom waypoints", 0.2, 1, 0.2)
